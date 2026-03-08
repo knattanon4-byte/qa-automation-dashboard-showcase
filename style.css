@@ -1,0 +1,87 @@
+/* style.css */
+body { 
+    margin: 0; 
+    font-family: 'Inter', sans-serif; 
+    background-color: #1E1E1E; 
+    color: #333; 
+}
+
+.hidden { display: none !important; }
+
+/* หน้า Login */
+#login-page { 
+    height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2070') no-repeat center center/cover;
+}
+
+.login-card { 
+    background: white; 
+    padding: 40px; 
+    border-radius: 15px; 
+    width: 350px; 
+    text-align: center; 
+}
+
+input { 
+    width: 100%; 
+    padding: 12px; 
+    margin: 10px 0; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    box-sizing: border-box; 
+}
+
+#Login-btn { 
+    width: 100%; 
+    padding: 12px; 
+    background-color: #4CAF50; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+/* หน้า Dashboard */
+#dashboard-page { 
+    padding: 20px; 
+    background-color: #F0F4F8; 
+    min-height: 100vh; 
+}
+
+.header { 
+    background-color: #DDE6ED; 
+    padding: 15px; 
+    border-radius: 10px; 
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 20px; 
+}
+
+.grid-container { 
+    display: grid; 
+    grid-template-columns: 2fr 1fr; 
+    gap: 20px; 
+}
+
+.card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 10px; 
+}
+
+th { background-color: #E2E8F0; padding: 10px; text-align: left; }
+td { padding: 10px; border-bottom: 1px solid #EDF2F7; }
+
+.status-pass { color: #48BB78; font-weight: bold; } /* สีเขียวตาม Figma */
+.status-reject { color: #F56565; font-weight: bold; } /* สีแดงตาม Figma */

@@ -4,11 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard BBL Project</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Login To Dashboard</h2>
-    <input type="text" id="username" placeholder="Username"> 
-    <input type="password" id="password" placeholder="Password">
-    <button id="Login-btn">Login</button>
+
+    <div id="login-page">
+        <div class="login-card">
+            <h2>Login To Dashboard</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button id="Login-btn" onclick="showDashboard()">Login</button>
+        </div>
+    </div>
+
+    <div id="dashboard-page" class="hidden">
+        <div class="header">
+            <strong>Welcome, Admin User</strong>
+            <button onclick="location.reload()" style="padding: 5px 10px; cursor:pointer;">Logout</button>
+        </div>
+
+        <div class="grid-container">
+            <div class="card" style="grid-column: span 2;">
+                <h3>ใบเสนอราคา</h3>
+                <table>
+                    <thead>
+                        <tr><th>Qu NO.</th><th>ลูกค้า</th><th>สถานะ</th><th>ราคา</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>6701 / 0001</td><td>First Tech</td><td class="status-pass">เสนอราคาผ่าน</td><td>800,000</td></tr>
+                        <tr><td>6701 / 0002</td><td>Apocalypse</td><td class="status-reject">ยกเลิก</td><td>12,000,000</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>ยืมอุปกรณ์</h3>
+                <table>
+                    <thead><tr><th>ชื่อรุ่น</th><th>S/N</th></tr></thead>
+                    <tbody><tr><td>Macbook Air M1</td><td>XXXX-XXXX-XXXX</td></tr></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>ลางาน</h3>
+                <table>
+                    <thead><tr><th>วันที่</th><th>สถานะ</th></tr></thead>
+                    <tbody><tr><td>09 / 01 / 2567</td><td class="status-pass">อนุมัติ</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDashboard() {
+            const user = document.getElementById('username').value;
+            if(user !== "") { 
+                document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('dashboard-page').classList.remove('hidden');
+            } else {
+                alert("กรุณาใส่ Username ก่อนครับ!");
+            }
+        }
+    </script>
 </body>
 </html>
