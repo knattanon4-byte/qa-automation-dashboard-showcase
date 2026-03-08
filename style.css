@@ -8,7 +8,9 @@ body {
 
 .hidden { display: none !important; }
 
+/* ========================================= */
 /* หน้า Login */
+/* ========================================= */
 #login-page { 
     height: 100vh; 
     display: flex; 
@@ -45,43 +47,126 @@ input {
     font-weight: bold; 
 }
 
-/* หน้า Dashboard */
-#dashboard-page { 
-    padding: 20px; 
-    background-color: #F0F4F8; 
-    min-height: 100vh; 
+/* ========================================= */
+/* หน้า Dashboard - Navbar */
+/* ========================================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px 40px;
+    border-bottom: 1px solid #E2E8F0;
 }
 
-.header { 
-    background-color: #DDE6ED; 
-    padding: 15px; 
+.nav-links { display: flex; align-items: center; }
+
+.logo { 
+    font-weight: bold; 
+    color: #E53E3E; 
+    margin-right: 30px; 
+    font-size: 20px;
+}
+
+.nav-links a { 
+    text-decoration: none; 
+    color: #4A5568; 
+    margin: 0 15px; 
+    font-size: 14px; 
+}
+
+/* ปุ่มที่ถูกเลือก (เสนอราคา/หน้าหลัก) ให้มีพื้นหลังสีฟ้า */
+.nav-links a.active { 
+    background: #BEE3F8; 
+    color: #2B6CB0; 
+    padding: 8px 16px; 
     border-radius: 10px; 
-    display: flex; 
-    justify-content: space-between; 
-    margin-bottom: 20px; 
+    font-weight: bold;
 }
 
-.grid-container { 
-    display: grid; 
-    grid-template-columns: 2fr 1fr; 
-    gap: 20px; 
+/* ========================================= */
+/* หน้า Dashboard - ส่วนหัวของเนื้อหา */
+/* ========================================= */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
 }
 
-.card { 
-    background: white; 
-    padding: 20px; 
-    border-radius: 12px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+/* ปุ่มเพิ่มข้อมูลสีเขียว */
+.btn-add {
+    background-color: #48BB78;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
 }
 
-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    margin-top: 10px; 
+.btn-add:hover { background-color: #38A169; }
+
+/* ช่องค้นหา */
+.search-bar input {
+    width: auto;
+    display: inline-block;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #E2E8F0;
 }
 
-th { background-color: #E2E8F0; padding: 10px; text-align: left; }
-td { padding: 10px; border-bottom: 1px solid #EDF2F7; }
+/* ========================================= */
+/* หน้า Dashboard - ตาราง (Table & Cards) */
+/* ========================================= */
+.card {
+    background: white;
+    padding: 0; 
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
 
-.status-pass { color: #48BB78; font-weight: bold; } /* สีเขียวตาม Figma */
-.status-reject { color: #F56565; font-weight: bold; } /* สีแดงตาม Figma */
+table { width: 100%; border-collapse: collapse; }
+
+th { 
+    background-color: #F7FAFC; 
+    padding: 15px; 
+    text-align: left; 
+    font-size: 13px;
+    color: #4A5568;
+    border-bottom: 1px solid #EDF2F7;
+}
+
+td { 
+    padding: 15px; 
+    border-bottom: 1px solid #F7FAFC; 
+    font-size: 13px;
+    color: #2D3748;
+}
+
+/* ไอคอนถังขยะสีแดง */
+.delete-icon { color: #E53E3E; cursor: pointer; }
+
+/* เพิ่มสีให้สถานะใบเสนอราคา */
+.status-pass { color: #48BB78 !important; font-weight: bold; }
+.status-reject { color: #E53E3E !important; font-weight: bold; }
+
+/* ========================================= */
+/* ส่วนแก้บั๊ก: ดันตัวหนังสือไม่ให้ชิดขอบเกินไป (UI Fix) */
+/* ========================================= */
+.card h3 {
+    padding: 20px 20px 10px 25px; /* ดันหัวข้อลงมาและเว้นซ้ายให้มีช่องว่างหายใจ */
+    margin: 0;
+    color: #2D3748;
+}
+
+th:first-child, td:first-child { 
+    padding-left: 25px !important; /* ดันตัวหนังสือคอลัมน์แรกสุดให้ขยับออกจากขอบซ้าย */
+}
+
+th:last-child, td:last-child { 
+    padding-right: 25px !important; /* ดันตัวหนังสือคอลัมน์สุดท้ายให้ขยับออกจากขอบขวา */
+}

@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard BBL Project</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .status-pass { color: #48BB78 !important; font-weight: bold; }
+        .status-reject { color: #E53E3E !important; font-weight: bold; }
+    </style>
 </head>
 <body>
 
@@ -17,43 +21,108 @@
         </div>
     </div>
 
-    <div id="dashboard-page" class="hidden">
-        <div class="header">
-            <strong>Welcome, Admin User</strong>
-            <button onclick="location.reload()" style="padding: 5px 10px; cursor:pointer;">Logout</button>
+<div id="dashboard-page" class="hidden">
+    <nav class="navbar">
+        <div class="nav-links">
+            <span class="logo">NATTANON</span>
+            <a href="#" onclick="showHome()" id="nav-home">หน้าหลัก</a>
+            <a href="#" class="active" onclick="showQuote()" id="nav-quote">เสนอราคา</a>
+            <a href="#">ยืม/คืน อุปกรณ์</a>
+            <a href="#">ลางาน</a>
+            <a href="#">รายชื่อพนักงาน</a>
+            <a href="#">ข้อมูลลูกค้า</a>
+        </div>
+        <div class="user-info">
+            <span>26 ก.ค. 2567 วันที่ 📅</span>
+            <span>Admin User (ผู้ดูแลระบบ) 👤</span>
+            <button onclick="location.reload()" class="logout-icon">🚪</button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        
+        <div id="home-content" class="hidden">
+            <div class="content-header">
+                <h2>หน้าหลัก</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                <div class="card" style="grid-column: span 2;">
+                    <h3>ใบเสนอราคา (สรุป)</h3>
+                    <table>
+                        <thead><tr><th>Qu NO.</th><th>ลูกค้า</th><th>สถานะ</th><th>ราคา</th></tr></thead>
+                        <tbody id="home-quote-table-body">
+                            <tr><td>6701 / 0001</td><td>First Tech</td><td class="status-pass">เสนอราคาผ่าน</td><td>800,000</td></tr>
+                            <tr><td>6701 / 0002</td><td>Apocalypse</td><td class="status-reject">ยกเลิก</td><td>12,000,000</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h3>ยืมอุปกรณ์</h3>
+                    <table>
+                        <thead><tr><th>ชื่อรุ่น</th><th>S/N</th></tr></thead>
+                        <tbody><tr><td>Macbook Air M1</td><td>XXXX-XXXX</td></tr></tbody>
+                    </table>
+                </div>
+
+                <div class="card" style="grid-column: 2;">
+                    <h3>ลางาน</h3>
+                    <table>
+                        <thead><tr><th>วันที่</th><th>สถานะ</th></tr></thead>
+                        <tbody><tr><td>09 / 01 / 2567</td><td class="status-pass">อนุมัติ</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <div class="grid-container">
-            <div class="card" style="grid-column: span 2;">
-                <h3>ใบเสนอราคา</h3>
+        <div id="quote-content">
+            <div class="content-header">
+                <h2>เสนอราคา</h2>
+                <div class="search-bar">
+                    <input type="text" placeholder="ค้นหาจาก Qu NO, Qu Date">
+                    <input type="month">
+                    <button class="btn-search">ค้นหา</button>
+                    <button class="btn-clear">ล้างการค้นหา</button>
+                </div>
+                <button class="btn-add" onclick="toggleInputRow()">+ เพิ่มข้อมูล</button>
+            </div>
+
+            <div class="card">
                 <table>
                     <thead>
-                        <tr><th>Qu NO.</th><th>ลูกค้า</th><th>สถานะ</th><th>ราคา</th></tr>
+                        <tr>
+                            <th>Qu NO.</th><th>Qu Date</th><th>ลูกค้า</th><th>โครงการ</th>
+                            <th>สถานะใบเสนอราคา</th><th>ใบแจ้งหนี้</th><th>ราคา</th><th>สร้างโดย</th><th></th>
+                        </tr>
                     </thead>
-                    <tbody>
-                        <tr><td>6701 / 0001</td><td>First Tech</td><td class="status-pass">เสนอราคาผ่าน</td><td>800,000</td></tr>
-                        <tr><td>6701 / 0002</td><td>Apocalypse</td><td class="status-reject">ยกเลิก</td><td>12,000,000</td></tr>
+                    <tbody id="quote-table-body">
+                        <tr id="input-row" class="hidden">
+                            <td><input type="text" id="new-qu" placeholder="6701/0001"></td>
+                            <td>-</td>
+                            <td><input type="text" id="new-customer" placeholder="ชื่อลูกค้า"></td>
+                            <td><input type="text" id="new-project" placeholder="โครงการ"></td>
+                            <td>
+                                <select id="new-status">
+                                    <option value="status-pass">เสนอราคาผ่าน</option>
+                                    <option value="status-reject">ยกเลิก</option>
+                                </select>
+                            </td>
+                            <td>-</td>
+                            <td><input type="number" id="new-price" placeholder="ราคา"></td>
+                            <td>Admin User</td>
+                            <td><button onclick="addQuote()">✅</button></td>
+                        </tr>
+                        <tr>
+                            <td>6701 / 0001</td><td>ไม่มี</td><td>First Tech</td><td>CDS</td>
+                            <td class="status-pass">เสนอราคาผ่าน</td><td>วางบิลมวดที่ 1</td><td>800,000</td><td>นัฏฐวัฒน์ แก้วแดง</td><td>🗑️ ></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-
-            <div class="card">
-                <h3>ยืมอุปกรณ์</h3>
-                <table>
-                    <thead><tr><th>ชื่อรุ่น</th><th>S/N</th></tr></thead>
-                    <tbody><tr><td>Macbook Air M1</td><td>XXXX-XXXX-XXXX</td></tr></tbody>
-                </table>
-            </div>
-
-            <div class="card">
-                <h3>ลางาน</h3>
-                <table>
-                    <thead><tr><th>วันที่</th><th>สถานะ</th></tr></thead>
-                    <tbody><tr><td>09 / 01 / 2567</td><td class="status-pass">อนุมัติ</td></tr></tbody>
-                </table>
-            </div>
         </div>
+
     </div>
+</div>
 
     <script>
         function showDashboard() {
@@ -64,6 +133,94 @@
             } else {
                 alert("กรุณาใส่ Username ก่อนครับ!");
             }
+        }
+
+        function generateQuNo() {
+            const d = new Date();
+            const yearBE = (d.getFullYear() + 543).toString().slice(-2); 
+            const month = String(d.getMonth() + 1).padStart(2, '0'); 
+            const tbody = document.getElementById('quote-table-body');
+            const existingRows = tbody.querySelectorAll('tr:not(#input-row)').length;
+            const nextSeq = String(existingRows + 1).padStart(4, '0');
+            return `${yearBE}${month} / ${nextSeq}`;
+        }
+
+        function toggleInputRow() {
+            const row = document.getElementById('input-row');
+            row.classList.toggle('hidden');
+            
+            if (!row.classList.contains('hidden')) {
+                const quInput = document.getElementById('new-qu');
+                quInput.value = generateQuNo(); 
+                quInput.setAttribute('readonly', true); 
+                quInput.style.backgroundColor = '#EDF2F7'; 
+                quInput.style.cursor = 'not-allowed'; 
+            }
+        }
+
+        function addQuote() {
+            const qu = document.getElementById('new-qu').value;
+            const customer = document.getElementById('new-customer').value;
+            const project = document.getElementById('new-project').value;
+            const price = document.getElementById('new-price').value;
+            const statusSelect = document.getElementById('new-status');
+            const statusText = statusSelect.options[statusSelect.selectedIndex].text;
+            const statusClass = statusSelect.value;
+
+            if(qu && customer && price) {
+                // 1. เพิ่มข้อมูลลงในตารางหน้า "เสนอราคา"
+                const tbody = document.getElementById('quote-table-body');
+                const newRow = tbody.insertRow(); 
+                
+                newRow.innerHTML = `
+                    <td>${qu}</td>
+                    <td>ไม่มี</td>
+                    <td>${customer}</td>
+                    <td>${project}</td>
+                    <td class="${statusClass}">${statusText}</td>
+                    <td>-</td>
+                    <td>${Number(price).toLocaleString()}</td>
+                    <td>Admin User</td>
+                    <td class="delete-icon" onclick="this.parentElement.remove()">🗑️ ></td>
+                `;
+
+                // 2. เพิ่มข้อมูลลงในตาราง "หน้าหลัก"
+                const homeTbody = document.getElementById('home-quote-table-body');
+                const newHomeRow = homeTbody.insertRow();
+                newHomeRow.innerHTML = `
+                    <td>${qu}</td>
+                    <td>${customer}</td>
+                    <td class="${statusClass}">${statusText}</td>
+                    <td>${Number(price).toLocaleString()}</td>
+                `;
+
+                // เคลียร์ค่าในช่องกรอก
+                document.getElementById('new-qu').value = '';
+                document.getElementById('new-customer').value = '';
+                document.getElementById('new-project').value = '';
+                document.getElementById('new-price').value = '';
+                
+                const row = document.getElementById('input-row');
+                row.classList.add('hidden');
+            } else {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วน (เลขที่, ลูกค้า, ราคา)");
+            }
+        }
+
+        function showHome() {
+            document.getElementById('home-content').classList.remove('hidden');
+            document.getElementById('quote-content').classList.add('hidden');
+            
+            document.getElementById('nav-home').classList.add('active');
+            document.getElementById('nav-quote').classList.remove('active');
+        }
+
+        function showQuote() {
+            document.getElementById('home-content').classList.add('hidden');
+            document.getElementById('quote-content').classList.remove('hidden');
+            
+            document.getElementById('nav-home').classList.remove('active');
+            document.getElementById('nav-quote').classList.add('active');
         }
     </script>
 </body>
