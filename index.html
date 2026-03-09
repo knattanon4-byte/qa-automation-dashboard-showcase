@@ -84,7 +84,7 @@
                     <button class="btn-search">ค้นหา</button>
                     <button class="btn-clear">ล้างการค้นหา</button>
                 </div>
-                <button class="btn-add" onclick="toggleInputRow()">+ เพิ่มข้อมูล</button>
+                <button class="btn-add" onclick="openModal()">+ เพิ่มข้อมูล</button>
             </div>
 
             <div class="card">
@@ -123,6 +123,84 @@
 
     </div>
 </div>
+<div id="quote-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 style="margin-top: 0;">เสนอราคา / <b>เพิ่มข้อมูลเสนอราคา</b></h2>
+            
+            <div class="form-card">
+                <h3>ข้อมูลใบเสนอราคา</h3>
+                <div class="form-grid">
+                    <div><label>Qu NO.</label><input type="text" id="modal-qu" readonly style="background:#EDF2F7; cursor:not-allowed;"></div>
+                    <div><label>Qu Date</label><input type="date" id="modal-date"></div>
+                    <div><label>ลูกค้า</label><input type="text" id="modal-customer" placeholder="ลูกค้า"></div>
+                    <div><label>โครงการ</label><input type="text" id="modal-project" placeholder="โครงการ"></div>
+                    <div style="grid-column: span 2;"><label>เนื้อหา</label><input type="text" id="modal-content" placeholder="เนื้อหา"></div>
+                    <div>
+                        <label>สถานะใบเสนอราคา</label>
+                        <select id="modal-status">
+                            <option value="status-pass">เสนอราคาผ่าน</option>
+                            <option value="status-reject">ยกเลิก</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>ใบแจ้งหนี้ (จำนวนงวด)</label>
+                        <select id="modal-installment-count" onchange="updateInstallments()">
+                            <option value="1">1 งวด (วางบิลงวดที่ 1)</option>
+                            <option value="2">2 งวด</option>
+                            <option value="3">3 งวด</option>
+                            <option value="4">4 งวด</option>
+                        </select>
+                    </div>
+                    <div><label>ราคา</label><input type="number" id="modal-price" placeholder="ราคา"></div>
+                </div>
+            </div>
+
+            <div id="installment-1" class="form-card installment-section">
+                <h3>วางบิลงวดที่ 1</h3>
+                <div class="form-grid">
+                    <div><label>เปอร์เซ็นต์</label><input type="text" placeholder="เปอร์เซ็นต์"></div>
+                    <div><label>จำนวนเงิน</label><input type="text" placeholder="จำนวนเงิน"></div>
+                    <div><label>เลขใบแจ้งหนี้</label><input type="text" placeholder="เลขใบแจ้งหนี้"></div>
+                    <div><label>เลขใบกำกับภาษี</label><input type="text" placeholder="เลขใบกำกับภาษี"></div>
+                </div>
+            </div>
+
+            <div id="installment-2" class="form-card installment-section hidden">
+                <h3>วางบิลงวดที่ 2</h3>
+                <div class="form-grid">
+                    <div><label>เปอร์เซ็นต์</label><input type="text"></div>
+                    <div><label>จำนวนเงิน</label><input type="text"></div>
+                    <div><label>เลขใบแจ้งหนี้</label><input type="text"></div>
+                    <div><label>เลขใบกำกับภาษี</label><input type="text"></div>
+                </div>
+            </div>
+
+            <div id="installment-3" class="form-card installment-section hidden">
+                <h3>วางบิลงวดที่ 3</h3>
+                <div class="form-grid">
+                    <div><label>เปอร์เซ็นต์</label><input type="text"></div>
+                    <div><label>จำนวนเงิน</label><input type="text"></div>
+                    <div><label>เลขใบแจ้งหนี้</label><input type="text"></div>
+                    <div><label>เลขใบกำกับภาษี</label><input type="text"></div>
+                </div>
+            </div>
+
+            <div id="installment-4" class="form-card installment-section hidden">
+                <h3>วางบิลงวดที่ 4</h3>
+                <div class="form-grid">
+                    <div><label>เปอร์เซ็นต์</label><input type="text"></div>
+                    <div><label>จำนวนเงิน</label><input type="text"></div>
+                    <div><label>เลขใบแจ้งหนี้</label><input type="text"></div>
+                    <div><label>เลขใบกำกับภาษี</label><input type="text"></div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">ยกเลิก</button>
+                <button class="btn-save" onclick="saveModalQuote()">บันทึก</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         function showDashboard() {
@@ -222,6 +300,117 @@
             document.getElementById('nav-home').classList.remove('active');
             document.getElementById('nav-quote').classList.add('active');
         }
+        // 1. เปิดป๊อปอัปและเสกเลข Qu NO ให้
+function openModal() {
+    document.getElementById('quote-modal').classList.remove('hidden');
+    document.getElementById('modal-qu').value = generateQuNo(); // ใช้ฟังก์ชันเจเนอเรตเลขอันเก่าของคุณ!
+}
+
+// 2. ปิดป๊อปอัป
+function closeModal() {
+    document.getElementById('quote-modal').classList.add('hidden');
+}
+
+// 3. โลจิกเปิด/ปิด กล่องค่างวด
+function updateInstallments() {
+    const count = parseInt(document.getElementById('modal-installment-count').value);
+    
+    // วนลูป 1 ถึง 4
+    for (let i = 1; i <= 4; i++) {
+        const section = document.getElementById(`installment-${i}`);
+        if (i <= count) {
+            section.classList.remove('hidden'); // โชว์กล่องถ้างวดถึง
+        } else {
+            section.classList.add('hidden'); // ซ่อนกล่องถ้างวดไม่ถึง
+        }
+    }
+}
+
+// ==========================================
+// 1. ฟังก์ชันดึงข้อมูลจากหลังบ้าน (GET API)
+// ==========================================
+async function loadQuotes() {
+    try {
+        // วิ่งไปดูดข้อมูลจาก API ที่พอร์ต 3000 ที่เราเพิ่งเปิด
+        const response = await fetch('http://localhost:3000/quotes');
+        const quotes = await response.json();
+        
+        // ล้างตารางเดิมให้ว่างก่อน (จะได้ไม่ซ้ำซ้อน)
+        document.getElementById('quote-table-body').innerHTML = '';
+        document.getElementById('home-quote-table-body').innerHTML = '';
+
+        // เอาข้อมูลที่ดูดมาได้ วนลูปใส่ตารางทีละบรรทัด
+        quotes.forEach(q => renderQuoteToTable(q));
+    } catch (error) {
+        console.error('พังจ้า ติดต่อ API ไม่ได้:', error);
+    }
+}
+
+// ฟังก์ชันช่วยวาดข้อมูลลงตาราง (แยกออกมาจะได้ไม่งง)
+function renderQuoteToTable(q) {
+    // ลงตารางหน้าเสนอราคา
+    const quoteTbody = document.getElementById('quote-table-body');
+    const newRow = quoteTbody.insertRow(); 
+    newRow.innerHTML = `
+        <td>${q.quNo}</td><td>ไม่มี</td><td>${q.customer}</td><td>${q.project}</td>
+        <td class="${q.statusClass}">${q.statusText}</td>
+        <td>-</td> 
+        <td>${Number(q.price).toLocaleString()}</td><td>Admin User</td>
+        <td class="delete-icon">🗑️ ></td>
+    `;
+
+    // ลงตารางหน้าหลัก
+    const homeTbody = document.getElementById('home-quote-table-body');
+    const newHomeRow = homeTbody.insertRow();
+    newHomeRow.innerHTML = `
+        <td>${q.quNo}</td><td>${q.customer}</td>
+        <td class="${q.statusClass}">${q.statusText}</td><td>${Number(q.price).toLocaleString()}</td>
+    `;
+}
+
+// สั่งให้ดึงข้อมูลทันทีที่เปิดเว็บขึ้นมา!
+window.onload = () => {
+    loadQuotes();
+};
+
+// ==========================================
+// 2. ฟังก์ชันบันทึกข้อมูลส่งเข้าหลังบ้าน (POST API)
+// ==========================================
+async function saveModalQuote() {
+    // ดึงค่าจากป๊อปอัป
+    const quNo = document.getElementById('modal-qu').value;
+    const customer = document.getElementById('modal-customer').value;
+    const project = document.getElementById('modal-project').value;
+    const price = document.getElementById('modal-price').value;
+    const statusSelect = document.getElementById('modal-status');
+    const statusText = statusSelect.options[statusSelect.selectedIndex].text;
+    const statusClass = statusSelect.value;
+
+    if(customer && price) {
+        // จัดของลงกล่อง เตรียมส่งให้หลังบ้าน
+        const newQuote = {
+            quNo: quNo,
+            customer: customer,
+            project: project,
+            statusClass: statusClass,
+            statusText: statusText,
+            price: Number(price)
+        };
+
+        // ยิง API ส่งข้อมูลไปเซฟ (POST)
+        await fetch('http://localhost:3000/quotes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newQuote)
+        });
+
+        closeModal(); // ปิดป๊อปอัป
+        loadQuotes(); // สั่งให้ตารางรีเฟรชดึงข้อมูลใหม่มาโชว์ทันที
+    } else {
+        alert("กรุณากรอกชื่อลูกค้าและราคาครับ");
+    }
+}
+
     </script>
 </body>
 </html>

@@ -1,0 +1,32 @@
+{
+  "quotes": [
+    {
+      "id": "1",
+      "quNo": "6701 / 0001",
+      "customer": "First Tech",
+      "project": "CDS",
+      "statusClass": "status-pass",
+      "statusText": "เสนอราคาผ่าน",
+      "price": 800000
+    },
+    {
+      "id": "2",
+      "quNo": "6701 / 0002",
+      "customer": "Apocalypse",
+      "project": "DEAT",
+      "statusClass": "status-reject",
+      "statusText": "ยกเลิก",
+      "price": 12000000
+    },
+    {
+      "id": "b962",
+      "quNo": "6903 / 0003",
+      "customer": "yfkyf",
+      "project": "vkjchgcmghjc",
+      "statusClass": "status-pass",
+      "statusText": "เสนอราคาผ่าน",
+      "price": 500000
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

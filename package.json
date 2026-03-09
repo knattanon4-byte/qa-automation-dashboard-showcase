@@ -1,0 +1,23 @@
+{
+  "name": "qa-automation-dashboard-showcase",
+  "version": "1.0.0",
+  "description": "โปรเจกต์นี้เป็นการนำระบบจัดการหลังบ้าน (Internal Dashboard) ที่ผมเคยรับหน้าที่เป็น Head UX/UI มาพัฒนาต่อยอดเพื่อแสดงศักยภาพด้าน Automation Testing และ Database Management โดยเน้นการทดสอบแบบ End-to-End ที่ครอบคลุมทั้งความถูกต้องของ Logic และความเป๊ะของ UI (Pixel Perfect) ครับ",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/knattanon4-byte/qa-automation-dashboard-showcase.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/knattanon4-byte/qa-automation-dashboard-showcase/issues"
+  },
+  "homepage": "https://github.com/knattanon4-byte/qa-automation-dashboard-showcase#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.5"
+  }
+}
