@@ -25,8 +25,8 @@
     <nav class="navbar">
         <div class="nav-links">
             <span class="logo">NATTANON</span>
-            <a href="#" onclick="showHome()" id="nav-home">หน้าหลัก</a>
-            <a href="#" class="active" onclick="showQuote()" id="nav-quote">เสนอราคา</a>
+            <a href="#" class="active" onclick="showHome()" id="nav-home">หน้าหลัก</a>
+            <a href="#" onclick="showQuote()" id="nav-quote">เสนอราคา</a>
             <a href="#">ยืม/คืน อุปกรณ์</a>
             <a href="#">ลางาน</a>
             <a href="#">รายชื่อพนักงาน</a>
@@ -41,7 +41,7 @@
 
     <div class="main-content">
         
-        <div id="home-content" class="hidden">
+        <div id="home-content">
             <div class="content-header">
                 <h2>หน้าหลัก</h2>
             </div>
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div id="quote-content">
+        <div id="quote-content" class="hidden">
             <div class="content-header">
                 <h2>เสนอราคา</h2>
                 <div class="search-bar">
@@ -123,6 +123,7 @@
 
     </div>
 </div>
+
 <div id="quote-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <h2 style="margin-top: 0;">เสนอราคา / <b>เพิ่มข้อมูลเสนอราคา</b></h2>
@@ -204,14 +205,17 @@
 
     <script>
         function showDashboard() {
-            const user = document.getElementById('username').value;
-            if(user !== "") { 
-                document.getElementById('login-page').classList.add('hidden');
-                document.getElementById('dashboard-page').classList.remove('hidden');
-            } else {
-                alert("กรุณาใส่ Username ก่อนครับ!");
-            }
-        }
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value; // ดึงค่าพาสเวิร์ดมาด้วย!
+
+    // เช็คว่าต้องใส่ทั้งคู่ถึงจะผ่าน
+    if(user !== "" && pass !== "") { 
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('dashboard-page').classList.remove('hidden');
+    } else {
+        alert("กรุณาใส่ Username และ Password ให้ครบถ้วนครับ!"); // แจ้งเตือนถ้าใส่ไม่ครบ
+    }
+}
 
         function generateQuNo() {
             const d = new Date();
@@ -246,7 +250,6 @@
             const statusClass = statusSelect.value;
 
             if(qu && customer && price) {
-                // 1. เพิ่มข้อมูลลงในตารางหน้า "เสนอราคา"
                 const tbody = document.getElementById('quote-table-body');
                 const newRow = tbody.insertRow(); 
                 
@@ -262,7 +265,6 @@
                     <td class="delete-icon" onclick="this.parentElement.remove()">🗑️ ></td>
                 `;
 
-                // 2. เพิ่มข้อมูลลงในตาราง "หน้าหลัก"
                 const homeTbody = document.getElementById('home-quote-table-body');
                 const newHomeRow = homeTbody.insertRow();
                 newHomeRow.innerHTML = `
@@ -272,7 +274,6 @@
                     <td>${Number(price).toLocaleString()}</td>
                 `;
 
-                // เคลียร์ค่าในช่องกรอก
                 document.getElementById('new-qu').value = '';
                 document.getElementById('new-customer').value = '';
                 document.getElementById('new-project').value = '';
@@ -300,117 +301,97 @@
             document.getElementById('nav-home').classList.remove('active');
             document.getElementById('nav-quote').classList.add('active');
         }
-        // 1. เปิดป๊อปอัปและเสกเลข Qu NO ให้
-function openModal() {
-    document.getElementById('quote-modal').classList.remove('hidden');
-    document.getElementById('modal-qu').value = generateQuNo(); // ใช้ฟังก์ชันเจเนอเรตเลขอันเก่าของคุณ!
-}
 
-// 2. ปิดป๊อปอัป
-function closeModal() {
-    document.getElementById('quote-modal').classList.add('hidden');
-}
-
-// 3. โลจิกเปิด/ปิด กล่องค่างวด
-function updateInstallments() {
-    const count = parseInt(document.getElementById('modal-installment-count').value);
-    
-    // วนลูป 1 ถึง 4
-    for (let i = 1; i <= 4; i++) {
-        const section = document.getElementById(`installment-${i}`);
-        if (i <= count) {
-            section.classList.remove('hidden'); // โชว์กล่องถ้างวดถึง
-        } else {
-            section.classList.add('hidden'); // ซ่อนกล่องถ้างวดไม่ถึง
+        function openModal() {
+            document.getElementById('quote-modal').classList.remove('hidden');
+            document.getElementById('modal-qu').value = generateQuNo();
         }
-    }
-}
 
-// ==========================================
-// 1. ฟังก์ชันดึงข้อมูลจากหลังบ้าน (GET API)
-// ==========================================
-async function loadQuotes() {
-    try {
-        // วิ่งไปดูดข้อมูลจาก API ที่พอร์ต 3000 ที่เราเพิ่งเปิด
-        const response = await fetch('http://localhost:3000/quotes');
-        const quotes = await response.json();
-        
-        // ล้างตารางเดิมให้ว่างก่อน (จะได้ไม่ซ้ำซ้อน)
-        document.getElementById('quote-table-body').innerHTML = '';
-        document.getElementById('home-quote-table-body').innerHTML = '';
+        function closeModal() {
+            document.getElementById('quote-modal').classList.add('hidden');
+        }
 
-        // เอาข้อมูลที่ดูดมาได้ วนลูปใส่ตารางทีละบรรทัด
-        quotes.forEach(q => renderQuoteToTable(q));
-    } catch (error) {
-        console.error('พังจ้า ติดต่อ API ไม่ได้:', error);
-    }
-}
+        function updateInstallments() {
+            const count = parseInt(document.getElementById('modal-installment-count').value);
+            
+            for (let i = 1; i <= 4; i++) {
+                const section = document.getElementById(`installment-${i}`);
+                if (i <= count) {
+                    section.classList.remove('hidden'); 
+                } else {
+                    section.classList.add('hidden'); 
+                }
+            }
+        }
 
-// ฟังก์ชันช่วยวาดข้อมูลลงตาราง (แยกออกมาจะได้ไม่งง)
-function renderQuoteToTable(q) {
-    // ลงตารางหน้าเสนอราคา
-    const quoteTbody = document.getElementById('quote-table-body');
-    const newRow = quoteTbody.insertRow(); 
-    newRow.innerHTML = `
-        <td>${q.quNo}</td><td>ไม่มี</td><td>${q.customer}</td><td>${q.project}</td>
-        <td class="${q.statusClass}">${q.statusText}</td>
-        <td>-</td> 
-        <td>${Number(q.price).toLocaleString()}</td><td>Admin User</td>
-        <td class="delete-icon">🗑️ ></td>
-    `;
+        async function loadQuotes() {
+            try {
+                const response = await fetch('http://localhost:3000/quotes');
+                const quotes = await response.json();
+                
+                document.getElementById('quote-table-body').innerHTML = '';
+                document.getElementById('home-quote-table-body').innerHTML = '';
 
-    // ลงตารางหน้าหลัก
-    const homeTbody = document.getElementById('home-quote-table-body');
-    const newHomeRow = homeTbody.insertRow();
-    newHomeRow.innerHTML = `
-        <td>${q.quNo}</td><td>${q.customer}</td>
-        <td class="${q.statusClass}">${q.statusText}</td><td>${Number(q.price).toLocaleString()}</td>
-    `;
-}
+                quotes.forEach(q => renderQuoteToTable(q));
+            } catch (error) {
+                console.error('พังจ้า ติดต่อ API ไม่ได้:', error);
+            }
+        }
 
-// สั่งให้ดึงข้อมูลทันทีที่เปิดเว็บขึ้นมา!
-window.onload = () => {
-    loadQuotes();
-};
+        function renderQuoteToTable(q) {
+            const quoteTbody = document.getElementById('quote-table-body');
+            const newRow = quoteTbody.insertRow(); 
+            newRow.innerHTML = `
+                <td>${q.quNo}</td><td>ไม่มี</td><td>${q.customer}</td><td>${q.project}</td>
+                <td class="${q.statusClass}">${q.statusText}</td>
+                <td>-</td> 
+                <td>${Number(q.price).toLocaleString()}</td><td>Admin User</td>
+                <td class="delete-icon">🗑️ ></td>
+            `;
 
-// ==========================================
-// 2. ฟังก์ชันบันทึกข้อมูลส่งเข้าหลังบ้าน (POST API)
-// ==========================================
-async function saveModalQuote() {
-    // ดึงค่าจากป๊อปอัป
-    const quNo = document.getElementById('modal-qu').value;
-    const customer = document.getElementById('modal-customer').value;
-    const project = document.getElementById('modal-project').value;
-    const price = document.getElementById('modal-price').value;
-    const statusSelect = document.getElementById('modal-status');
-    const statusText = statusSelect.options[statusSelect.selectedIndex].text;
-    const statusClass = statusSelect.value;
+            const homeTbody = document.getElementById('home-quote-table-body');
+            const newHomeRow = homeTbody.insertRow();
+            newHomeRow.innerHTML = `
+                <td>${q.quNo}</td><td>${q.customer}</td>
+                <td class="${q.statusClass}">${q.statusText}</td><td>${Number(q.price).toLocaleString()}</td>
+            `;
+        }
 
-    if(customer && price) {
-        // จัดของลงกล่อง เตรียมส่งให้หลังบ้าน
-        const newQuote = {
-            quNo: quNo,
-            customer: customer,
-            project: project,
-            statusClass: statusClass,
-            statusText: statusText,
-            price: Number(price)
+        window.onload = () => {
+            loadQuotes();
         };
 
-        // ยิง API ส่งข้อมูลไปเซฟ (POST)
-        await fetch('http://localhost:3000/quotes', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newQuote)
-        });
+        async function saveModalQuote() {
+            const quNo = document.getElementById('modal-qu').value;
+            const customer = document.getElementById('modal-customer').value;
+            const project = document.getElementById('modal-project').value;
+            const price = document.getElementById('modal-price').value;
+            const statusSelect = document.getElementById('modal-status');
+            const statusText = statusSelect.options[statusSelect.selectedIndex].text;
+            const statusClass = statusSelect.value;
 
-        closeModal(); // ปิดป๊อปอัป
-        loadQuotes(); // สั่งให้ตารางรีเฟรชดึงข้อมูลใหม่มาโชว์ทันที
-    } else {
-        alert("กรุณากรอกชื่อลูกค้าและราคาครับ");
-    }
-}
+            if(customer && price) {
+                const newQuote = {
+                    quNo: quNo,
+                    customer: customer,
+                    project: project,
+                    statusClass: statusClass,
+                    statusText: statusText,
+                    price: Number(price)
+                };
 
+                await fetch('http://localhost:3000/quotes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newQuote)
+                });
+
+                closeModal(); 
+                loadQuotes(); 
+            } else {
+                alert("กรุณากรอกชื่อลูกค้าและราคาครับ");
+            }
+        }
     </script>
 </body>
 </html>
